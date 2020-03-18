@@ -16,25 +16,22 @@ function ordersync()
     $usercount = count($user_ids);
     $sql = 'select * from store where status = 1';
     $stores = mysqli_query($con, $sql);
+    $orderCount = 0;
     while ($store = mysqli_fetch_assoc($stores)) {
         $orders = json_decode(getorders($store['storeURL']));
-
-        $orderCount = 0;
         foreach ($orders as $order) {
 
-            $sql = "SELECT * FROM orders where wp_id='" . $order->wp_id . "'";
+            $sql = "SELECT * FROM orders where webID='" . $order->wp_id . "'";
             $results = mysqli_query($con, $sql);
             $result = mysqli_fetch_assoc($results);
-            if (count($result) == 0) {
+            if (!$result) {
                 if ($usercount == 0) {
                     $userID  = 1;
                 } else {
                     $userID = $user_ids[rand(0, $usercount - 1)];
                 }
-
-                // var_dump($order);
-                $today = date("Ym");
-                $rand = strtoupper(substr(uniqid(sha1(time())), 0, 4));
+                $today = date("dm");
+                $rand = strtoupper(substr(uniqid(md5($order->customer->phone)), 0, 4));
                 $invoiceID = $today . $rand;
                 $total = $order->total;
                 $DeliveryCharge = 100;
@@ -52,8 +49,9 @@ function ordersync()
                 $PaymentAmount = NULL;
                 $PaymentAgentNumber = NULL;
                 $products = $order->products;
+                $webID = $order->wp_id;
 
-                $orderData = "INSERT INTO orders values (null, '" . $total . "',  '" . $DeliveryCharge . "',  '" . $DiscountCharge . "',  '" . $PaymentAmount . "', CURDATE(),  null , null,  null ,  '" . $invoiceID . "', null,  '" . $userID . "',  '" . $storeID . "',  '0','Processing') ";
+                $orderData = "INSERT INTO orders values (null, '" . $total . "',  '" . $DeliveryCharge . "',  '" . $DiscountCharge . "',  '" . $PaymentAmount . "', CURDATE(),  null , null,  null ,  '" . $invoiceID . "', '" . $webID . "',  '" . $userID . "',  '" . $storeID . "',  '0','Processing') ";
                 mysqli_query($con, $orderData);
                 $orderID = mysqli_insert_id($con);
                 $orderDetails = "INSERT INTO orderDetails values ('" . $orderID . "','" . $CustomerName . "', '" . $CustomerPhone . "', '" . $CustomerAddress . "', '" . $courierID . "',  '" . $cityID . "',  '" . $zoneID . "', '" . $PaymentType . "',  '" . $PaymentNumber . "', '" . $PaymentAgentNumber . "') ";
@@ -70,6 +68,9 @@ function ordersync()
                 if ($orderID && $orderDetails && $orderProduct) {
                     $result['status'] = 'success';
                     $result['message'] = 'Successfully Place Order';
+                    $orderCount++;
+                    $statusComments =  "Order Created ";
+                    comments($invoiceID, $statusComments, 1);
                 } else {
                     $sql = "delete from orders where orderID='" . $orderID . "'";
                     mysqli_query($con, $sql);
@@ -81,13 +82,6 @@ function ordersync()
                     $result['status'] = 'failed';
                     $result['message'] = 'Unsuccessful to Place Order';
                 }
-
-                $statusComments =  "Order Created ";
-
-                comments($invoiceID, $statusComments, 1);
-
-
-                $orderCount++;
             }
         }
     }

@@ -3,30 +3,26 @@ $(document).ready(function () {
     // Courier table ajax load
 
     var table = $('#purchaseTable').DataTable({
-        "ajax": 'ajax/purchase.php?action=getPurchase',
+        "ajax": 'ajax/stock.php?action=getPurchase',
         ordering: false,
+        pageLength: 50,
         "columns": [
-            { "data": "Date" },
-            { "data": "supplierName" },
             { "data": "productName" },
-            { "data": "Quantity" },
+            { "data": "purchase" },
             {
                 data: null,
                 render: function (data) {
-                    return '<button type="button" value="' + data.purchaseID + '" class="btn btn-cyan btn-sm">Edit</button>'
-                        + '<button class="btn btn-danger btn-sm" value="' + data.purchaseID + '" type="button" >Delete</button>';
-
+                    return (data.purchase - data.stock);
                 }
-            }
+            },
+            { "data": "stock" },
+
         ]
     });
-
-
-
     $("#supplierID").select2({
         placeholder: "Select a Supplier",
         ajax: {
-            url: 'ajax/purchase.php',
+            url: 'ajax/stock.php',
             contentType: 'application/json',
             data: function (params) {
                 var query = {
@@ -46,7 +42,7 @@ $(document).ready(function () {
     $("#productID").select2({
         placeholder: "Select a Supplier",
         ajax: {
-            url: 'ajax/purchase.php',
+            url: 'ajax/stock.php',
             contentType: 'application/json',
             data: function (params) {
                 var query = {
@@ -105,7 +101,7 @@ $(document).ready(function () {
         if (type == 'add') {
             $.ajax({
                 type: "post",
-                url: 'ajax/purchase.php',
+                url: 'ajax/stock.php',
                 data: {
                     'action': 'save',
                     'date': date.val(),
@@ -140,7 +136,7 @@ $(document).ready(function () {
 
             $.ajax({
                 type: "post",
-                url: 'ajax/purchase.php',
+                url: 'ajax/stock.php',
                 data: {
                     'action': 'update',
                     'date': date.val(),
@@ -187,7 +183,7 @@ $(document).ready(function () {
                 if (willDelete) {
 
                     jQuery.ajax({
-                        url: "ajax/purchase.php",
+                        url: "ajax/stock.php",
                         contentType: "application/json",
                         data: {
                             action: "delete",
@@ -220,7 +216,7 @@ $(document).ready(function () {
 
         var purchaseID = $(this).val();
         jQuery.ajax({
-            url: 'ajax/purchase.php',
+            url: 'ajax/stock.php',
             contentType: 'application/json',
             data: {
                 'action': 'single',

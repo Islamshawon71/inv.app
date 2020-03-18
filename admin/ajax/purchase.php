@@ -87,6 +87,18 @@ function save()
     $sql = "insert into purchase values(null,'$supplierID','$productID','$quantity','$date')";
     $result = mysqli_query($con, $sql);
     if ($result) {
+
+        $sql = "SELECT * FROM productStock";
+        $results = mysqli_query($con, $sql);
+        $result = mysqli_fetch_assoc($results);
+        if ($result) {
+            $stock = $result['stock'] + $quantity;
+            $update = "update productStock set stock='" . $stock . "' where productID='" . $productID . "' ";
+            mysqli_query($con, $update);
+        } else {
+            $sql = "insert into productStock values(null,'$productID',$quantity)";
+            mysqli_query($con, $sql);
+        }
         $response['status'] = 'success';
         $response['message'] = 'Successfully Add Purchase';
     } else {
@@ -103,16 +115,28 @@ function update()
     $supplierID =  $_REQUEST['supplierID'];
     $productID =  $_REQUEST['productID'];
     $quantity =  $_REQUEST['quantity'];
+    $oldQuantity =  $_REQUEST['oldQuantity'];
     $purchaseID =  $_REQUEST['purchaseID'];
 
     $sql = "update purchase set supplierID='" . $supplierID . "' , productID='" . $productID . "' , quantity='" . $quantity . "' , date='" . $date . "'   where purchaseID='" . $purchaseID . "'";
     $result = mysqli_query($con, $sql);
     if ($result) {
+        $sql = "SELECT * FROM productStock where productID='" . $productID . "' ";
+        $productStock = mysqli_query($con, $sql);
+        $productStockResult = mysqli_fetch_assoc($productStock);
+        if ($productStockResult) {
+            $stock = $productStockResult['stock'] - $oldQuantity + $quantity;
+            $stockUpdate = "update productStock set stock='" . $stock . "' where productID='" . $productID . "' ";
+            mysqli_query($con, $stockUpdate);
+        } else {
+            $sql = "insert into productStock values(null,'$productID',$quantity)";
+            mysqli_query($con, $sql);
+        }
         $results['status'] = 'success';
-        $results['message'] = 'Successfully Update Users';
+        $results['message'] = 'Successfully Update Purchase';
     } else {
         $results['status'] = 'failed';
-        $results['message'] = 'Unsuccessful to Update Users';
+        $results['message'] = 'Unsuccessful to Update Purchase';
     }
 
     echo  json_encode($results);
@@ -141,16 +165,28 @@ function single()
 function delete()
 {
     global $con;
-    $data = array();
     $purchaseID = $_REQUEST['purchaseID'];
+    $purchaseProductSql = "SELECT * FROM purchase where purchaseID='" . $purchaseID . "' ";
+    $purchaseProducts = mysqli_query($con, $purchaseProductSql);
+    $purchaseProduct = mysqli_fetch_assoc($purchaseProducts);
+    $productID = $purchaseProduct['productID'];
+    $quantity = $purchaseProduct['quantity'];
     $sql = "delete from purchase where purchaseID=$purchaseID";
     $result = mysqli_query($con, $sql);
     if ($result) {
+        $sql = "SELECT * FROM productStock where productID='" . $productID . "' ";
+        $productStock = mysqli_query($con, $sql);
+        $productStockResult = mysqli_fetch_assoc($productStock);
+        if ($productStockResult) {
+            $stock = $productStockResult['stock'] - $quantity;
+            $stockUpdate = "update productStock set stock='" . $stock . "' where productID='" . $productID . "' ";
+            mysqli_query($con, $stockUpdate);
+        }
         $data['status'] = 'success';
-        $data['message'] = 'Successfully remove User';
+        $data['message'] = 'Successfully remove Purchase';
     } else {
         $data['status'] = 'failed';
-        $data['message'] = 'Unsuccessful to remove User';
+        $data['message'] = 'Unsuccessful to remove Purchase';
     }
     echo  json_encode($data);
     die();

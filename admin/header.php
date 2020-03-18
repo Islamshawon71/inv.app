@@ -430,7 +430,7 @@ include "../inc/fn.php";
                                 <li class="sidebar-item">
                                     <a href="purchase.php" class="sidebar-link">
                                         <i class="mdi mdi-note-outline"></i>
-                                        <span class="hide-menu">Purchess</span>
+                                        <span class="hide-menu">purchase</span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">

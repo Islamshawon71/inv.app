@@ -6,10 +6,10 @@ $(document).ready(function () {
         "ajax": 'ajax/purchase.php?action=getPurchase',
         ordering: false,
         "columns": [
-            { "data": "Date" },
+            { "data": "date" },
             { "data": "supplierName" },
             { "data": "productName" },
-            { "data": "Quantity" },
+            { "data": "quantity" },
             {
                 data: null,
                 render: function (data) {
@@ -82,6 +82,7 @@ $(document).ready(function () {
         var supplierID = $('#supplierID');
         var productID = $('#productID');
         var quantity = $('#quantity');
+        var oldQuantity = $('#oldQuantity');
 
         if (!date.val()) {
             swal("Oops...!", "Date should not empty !", "error");
@@ -147,6 +148,7 @@ $(document).ready(function () {
                     'supplierID': supplierID.val(),
                     'productID': productID.val(),
                     'quantity': quantity.val(),
+                    'oldQuantity': oldQuantity.val(),
                     'purchaseID': purchaseID
                 },
                 success: function (response) {
@@ -231,8 +233,9 @@ $(document).ready(function () {
                 if (data['status'] == 'success') {
 
                     // Add data to modal
-                    $('#date').val(data['data']['Date']);
-                    $('#quantity').val(data['data']['Quantity']);
+                    $('#date').val(data['data']['date']);
+                    $('#quantity').val(data['data']['quantity']);
+                    $('#oldQuantity').val(data['data']['quantity']);
                     $("#productID").empty().append('<option value="' + data['data']['productID'] + '"  >' + data['data']['productName'] + '</option>');
                     $("#supplierID").empty().append('<option value="' + data['data']['supplierID'] + '"  >' + data['data']['supplierName'] + '</option>');
 
