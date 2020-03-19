@@ -51,7 +51,7 @@ function ordersync()
                 $products = $order->products;
                 $webID = $order->wp_id;
 
-                $orderData = "INSERT INTO orders values (null, '" . $total . "',  '" . $DeliveryCharge . "',  '" . $DiscountCharge . "',  '" . $PaymentAmount . "', CURDATE(),  null , null,  null ,  '" . $invoiceID . "', '" . $webID . "',  '" . $userID . "',  '" . $storeID . "',  '0','Processing') ";
+                $orderData = "INSERT INTO orders values (null, '" . $total . "',  '" . $DeliveryCharge . "',  '" . $DiscountCharge . "',  '" . $PaymentAmount . "', CURDATE(),  null , null,  null ,  '" . $invoiceID . "', '" . $webID . "',  '" . $userID . "',  '" . $storeID . "',  '1','Processing') ";
                 mysqli_query($con, $orderData);
                 $orderID = mysqli_insert_id($con);
                 $orderDetails = "INSERT INTO orderDetails values ('" . $orderID . "','" . $CustomerName . "', '" . $CustomerPhone . "', '" . $CustomerAddress . "', '" . $courierID . "',  '" . $cityID . "',  '" . $zoneID . "', '" . $PaymentType . "',  '" . $PaymentNumber . "', '" . $PaymentAgentNumber . "') ";

@@ -22,7 +22,7 @@ $(document).ready(function () {
       },
       {
         text: '<i class="fas fa-box-open"></i> Stock Out',
-        className: "btn  btn-warning btn-sm waves-effect",
+        className: "btn stock-out btn-warning btn-sm waves-effect",
         action: function (e, dt, node, config) {
           chnageStatus("Stock Out");
         }
@@ -31,24 +31,33 @@ $(document).ready(function () {
         text: '<i class="fas fa-print"></i> Invoice Print',
         className: "btn invoice-print btn-info btn-sm waves-effect ",
         action: function (e, dt, node, config) {
-          // chnageStatus("Invoice Print");
 
           var data = table.$('input, select').serialize();
-
-
           var rows_selected = table.column(0).checkboxes.selected();
           var ids = [];
           $.each(rows_selected, function (index, rowId) {
             ids[index] = rowId;
           });
-          // console.log(data);
-
-
           window.open('print.php?invoiceID=' + ids, '_blank')
 
           // document.location.href = 'print.php?invoiceID=' + ids;
 
+          if ($("#ordersTable").attr("data-type") != 'Invoiced') {
 
+            swal({
+              title: "Are you sure?",
+              text: "All inveoice Printed !",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+            }).then((willDelete) => {
+              if (willDelete) {
+                chnageStatus("Invoiced");
+              } else {
+                swal("Invoice Stay Pending !");
+              }
+            });
+          }
 
         }
       },
@@ -178,10 +187,15 @@ $(document).ready(function () {
         $('.csv').hide();
       }
 
-      if ($("#ordersTable").attr("data-type") == 'Completed') {
-        $('.invoice').show();
+      if ($("#ordersTable").attr("data-type") == 'Invoiced') {
+        $('.delivered').show();
       } else {
-        $('.invoice').hide();
+        $('.delivered').hide();
+      }
+      if ($("#ordersTable").attr("data-type") == 'Stock Out') {
+        $('.stock-out').hide();
+      } else {
+        $('.stock-out').show();
       }
     },
   });

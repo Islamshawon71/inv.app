@@ -1,8 +1,5 @@
 <?php include "header.php" ?>
 <div class="page-wrapper">
-    <!-- ============================================================== -->
-    <!-- Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
     <div class="page-breadcrumb">
         <div class="row">
             <div class="col-12 d-flex no-block align-items-center">
@@ -27,18 +24,8 @@
             </div>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- End Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Container fluid  -->
-    <!-- ============================================================== -->
     <div class="container-fluid">
-        <!-- ============================================================== -->
-        <!-- Start Page Content -->
-        <!-- ============================================================== -->
         <div class="row">
-            <!-- Column -->
             <div class="col-md-6 col-lg-2">
                 <div class="card card-hover">
                     <a href="?orders=All">
@@ -49,7 +36,6 @@
                     </a>
                 </div>
             </div>
-            <!-- Column -->
             <div class="col-md-6 col-lg-2">
                 <div class="card card-hover">
                     <a href="?orders=Pending Invoice">
@@ -60,7 +46,6 @@
                     </a>
                 </div>
             </div>
-            <!-- Column -->
             <div class="col-md-6 col-lg-2">
                 <div class="card card-hover">
                     <a href="?orders=Invoiced">
@@ -82,7 +67,6 @@
                     </a>
                 </div>
             </div>
-
         </div>
         <div class="row">
             <div class="col-12">

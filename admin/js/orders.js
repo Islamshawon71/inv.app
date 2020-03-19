@@ -14,7 +14,7 @@ $(document).ready(function () {
       },
       {
         text: '<i class="fas fa-hand-paper"></i>  On Hold',
-        className: "btn  btn-warning btn-sm waves-effect",
+        className: "btn on-hold btn-warning btn-sm waves-effect",
         action: function (e, dt, node, config) {
           chnageStatus("On Hold");
         }
@@ -37,6 +37,7 @@ $(document).ready(function () {
         text: '<i class="fas fa-check"></i> Pending Invoice',
         className: "btn invoice btn-success btn-sm",
         action: function (e, dt, node, config) {
+
           chnageStatus("Pending Invoice");
         }
       },
@@ -155,6 +156,14 @@ $(document).ready(function () {
       } else {
         $('.invoice').hide();
       }
+      if ($("#ordersTable").attr("data-type") == 'On Hold') {
+        $('.on-hold').hide();
+      } else {
+        $('.on-hold').show();
+      }
+
+
+
     },
   });
 

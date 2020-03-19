@@ -147,8 +147,8 @@ function chnageStatus()
     $result = array();
     $count = 0;
     foreach ($ids as $invoiceID) {
-        if ($status == 'Completed') {
-            $sql = "update orders set DeliveryDate= CURDATE(), status='Delivered'  where invoiceID='" . $invoiceID . "'";
+        if ($status == 'Delivered') {
+            $sql = "update orders set DeliveryDate= CURDATE(), step='3', status='Delivered'  where invoiceID='" . $invoiceID . "'";
         } else {
             $sql = "update orders set status='" . $status . "'  where invoiceID='" . $invoiceID . "'";
         }
@@ -197,42 +197,6 @@ function single($orderID)
     }
     die();
 }
-
-function updateStatus()
-{
-
-    global $con;
-    $status = $_REQUEST['status'];
-    $userID = $_REQUEST['userID'];
-    $orderID = $_REQUEST['orderID'];
-    $comments = $_REQUEST['comments'];
-    $result = array();
-    $count = 0;
-    if (!empty($status)) {
-        if ($status == 'Delivered') {
-            $sql = "update orders set DeliveryDate= CURDATE(), status='Delivered'  where orderID='" . $orderID . "'";
-        } else if ($status == 'Paid') {
-            $sql = "update orders set paidReturnDate= CURDATE(), status='Paid'  where orderID='" . $orderID . "'";
-        } else if ($status == 'Return') {
-            $sql = "update orders set paidReturnDate= CURDATE(), status='Return'  where orderID='" . $orderID . "'";
-        } else {
-            $sql = "update orders set status='" . $status . "'  where orderID='" . $orderID . "'";
-        }
-        $results = mysqli_query($con, $sql);
-        $statusComments = getUser($userID) . " Update order Status to " . $status;
-        comments($orderID, $statusComments, $userID);
-    }
-    if (!empty($comments)) {
-        comments($orderID, $comments, $userID);
-    }
-
-    $result['status'] = 'success';
-    $result['message'] = 'Successfully Update Courier';
-
-    echo  json_encode($result);
-    die();
-}
-
 
 
 function getProductDetails($orderID)

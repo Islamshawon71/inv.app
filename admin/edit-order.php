@@ -25,7 +25,7 @@ $result = mysqli_fetch_assoc($results);
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <button type="submit" class="btn btn-block btn-danger">Cancel</button>
+                            <a href="<?php echo $_SERVER['HTTP_REFERER']; ?>" class=" btn btn-block btn-danger">Cancel</a>
                         </ol>
                     </nav>
                 </div>

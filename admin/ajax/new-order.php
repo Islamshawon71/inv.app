@@ -165,7 +165,7 @@ function placeOrder()
     global $con;
 
 
-    $order = "INSERT INTO orders values (null, '" . $total . "',  '" . $DeliveryCharge . "',  '" . $DiscountCharge . "',  '" . $PaymentAmount . "', CURDATE(),  null , null,  null ,  '" . $invoiceID . "', null,  '" . $userID . "',  '" . $storeID . "',  '0','Processing') ";
+    $order = "INSERT INTO orders values (null, '" . $total . "',  '" . $DeliveryCharge . "',  '" . $DiscountCharge . "',  '" . $PaymentAmount . "', CURDATE(),  null , null,  null ,  '" . $invoiceID . "', null,  '" . $userID . "',  '" . $storeID . "',  '1','Processing') ";
     mysqli_query($con, $order);
     $orderID = mysqli_insert_id($con);
     $orderDetails = "INSERT INTO orderDetails values ('" . $orderID . "','" . $CustomerName . "', '" . $CustomerPhone . "', '" . $CustomerAddress . "', '" . $courierID . "',  '" . $cityID . "',  '" . $zoneID . "', '" . $PaymentType . "',  '" . $PaymentNumber . "', '" . $PaymentAgentNumber . "') ";
